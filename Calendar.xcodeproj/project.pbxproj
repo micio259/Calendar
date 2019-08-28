@@ -12,6 +12,7 @@
 		3B4843072312CBA600975ACD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B4843062312CBA600975ACD /* Assets.xcassets */; };
 		3B48430A2312CBA600975ACD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B4843082312CBA600975ACD /* LaunchScreen.storyboard */; };
 		3B6FCC1B2312D86B003C0C26 /* CalendarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6FCC1A2312D86B003C0C26 /* CalendarTests.swift */; };
+		3B6FCC232312DDA9003C0C26 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6FCC222312DDA9003C0C26 /* OnboardingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +35,7 @@
 		3B6FCC182312D86B003C0C26 /* CalendarTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CalendarTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B6FCC1A2312D86B003C0C26 /* CalendarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarTests.swift; sourceTree = "<group>"; };
 		3B6FCC1C2312D86B003C0C26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3B6FCC222312DDA9003C0C26 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			children = (
 				3B4842FF2312CBA600975ACD /* AppDelegate.swift */,
 				3B4843012312CBA600975ACD /* PageViewController.swift */,
+				3B6FCC222312DDA9003C0C26 /* OnboardingViewController.swift */,
 				3B4843062312CBA600975ACD /* Assets.xcassets */,
 				3B4843082312CBA600975ACD /* LaunchScreen.storyboard */,
 				3B48430B2312CBA600975ACD /* Info.plist */,
@@ -193,6 +196,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B6FCC232312DDA9003C0C26 /* OnboardingViewController.swift in Sources */,
 				3B4843022312CBA600975ACD /* PageViewController.swift in Sources */,
 				3B4843002312CBA600975ACD /* AppDelegate.swift in Sources */,
 			);
