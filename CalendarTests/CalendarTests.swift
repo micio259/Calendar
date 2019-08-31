@@ -61,7 +61,7 @@ class CalendarTests: XCTestCase {
         //given
         let button = UIButton()
         //when
-        sut.buttonSetup(button: button)
+        sut.setupButton(button: button)
         //then
         XCTAssertTrue(sut.view.subviews.contains(button))
     }
@@ -105,6 +105,47 @@ class CalendarTests: XCTestCase {
         XCTAssertEqual(newViewController.textTitle?.text, "Title")
         XCTAssertEqual(newViewController.textDescription?.text, "Description")
         XCTAssertTrue(newViewController.view.subviews.contains(newViewController.imageView!))
+    }
+    
+    func testCalculatePageControlHeight() {
+        //given
+        //when
+        let returnValue = calculatePageControlTopSpacing()
+        sut.view.layoutSubviews()
+        //then
+        XCTAssertEqual(returnValue, sut.pagePageControl.frame.origin.y - sut.pageButton.frame.maxY)
+    }
+    
+    func testCalculateButtonSideSpacing() {
+        //given
+        //when
+        sut.view.layoutSubviews()
+        let returnValue = ceil(calculateButtonSideSpacing())
+        let value = sut.pageButton.frame.origin.x
+        print(returnValue)
+        print(value)
+        //then
+        XCTAssertEqual(returnValue, value)
+    }
+    
+    func testCalculateButtonHeight() {
+        //given
+        //when
+        sut.view.layoutSubviews()
+        let returnValue = calculateButtonHeight()
+        let buttonHeight = sut.pageButton.frame.height
+        //then
+        XCTAssertEqual(returnValue, buttonHeight)
+    }
+    
+    func testCalculateButtonTopSpacing() {
+        //given
+        //when
+        sut.view.layoutSubviews()
+        let returnValue = calculateButtonTopSpacing()
+        let buttonY = sut.pageButton.frame.origin.y
+        //then
+        XCTAssertEqual(returnValue, buttonY)
     }
     
 }

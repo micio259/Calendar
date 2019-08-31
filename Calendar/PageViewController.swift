@@ -11,10 +11,10 @@ import UIKit
 class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
     //MARK: - variables
-    let firstViewController = OnboardingViewController(textTitle: "Welcome", description: "Join us and discover all of the features we created for you. Just press…")
-    let secondViewController = OnboardingViewController(textTitle: "Calendar", description: "Be informed and have perspective how your month is scheduled. Just look at Calendar.")
-    let thirdViewController = OnboardingViewController(textTitle: "Upcoming set", description: "We provide you being always up to date. You won’t miss any of tasks you have planned before.")
-    let fourthViewController = OnboardingViewController(textTitle: "Join now", description: "Enter the app, experience new possibilities and progress. Your time is the most important.")
+    let firstViewController = OnboardingViewController(textTitle: "Welcome", description: "Join us and discover all\nof the features we created\nfor you. Just press…")
+    let secondViewController = OnboardingViewController(textTitle: "Calendar", description: "Be informed and have perspective\nhow your month is scheduled.\nJust look at Calendar.")
+    let thirdViewController = OnboardingViewController(textTitle: "Upcoming set", description: "We provide you being always\nup to date. You won’t miss any\nof tasks you have planned before.")
+    let fourthViewController = OnboardingViewController(textTitle: "Join now", description: "Enter the app, experience\nnew possibilities and progress.\nYour time is the most important.")
     
     lazy var orderedViewControllers: [UIViewController] = {
         return [firstViewController, secondViewController, thirdViewController, fourthViewController]
@@ -27,14 +27,15 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
     override func viewDidLoad() {
         super.viewDidLoad()
         setupPageViewControllerDelegatesAndFirstScreen(viewControllersArray: orderedViewControllers)
+        setupButton(button: pageButton)
         setupPageControl(pageControl: pagePageControl)
-        buttonSetup(button: pageButton)
+        print("Screen height: \(UIScreen.main.bounds.height)")
     }
     
     //MARK: - PageControl Setup
     //TODO: - Tested
     func setupPageControl(pageControl: UIPageControl) {
-        pageControl.frame = CGRect(x: 0, y: UIScreen.main.bounds.maxY - 310, width: UIScreen.main.bounds.width, height: 50)
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
         pageControl.numberOfPages = orderedViewControllers.count
         pageControl.currentPage = 0
         pageControl.alpha = 0.5
@@ -43,6 +44,11 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
         pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.isUserInteractionEnabled = false
         self.view.addSubview(pageControl)
+        
+        pageControl.topAnchor.constraint(equalTo: self.pageButton.bottomAnchor, constant: calculatePageControlTopSpacing()).isActive = true
+        pageControl.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+        pageControl.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+        pageControl.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
     
     //MARK: - PageViewController Setups
@@ -57,17 +63,33 @@ class PageViewController: UIPageViewController, UIPageViewControllerDelegate, UI
     
     //MARK: - Button Setup
     //TODO: - Tested
-    func buttonSetup(button: UIButton) {
-        button.frame = CGRect(x: 100, y: 515, width: UIScreen.main.bounds.width - 200, height: 50)
+    func setupButton(button: UIButton) {
+        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.titleLabel?.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = #colorLiteral(red: 0.4608529806, green: 0.6918587089, blue: 0.8610083461, alpha: 1)
         button.setTitle("Start", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Helvetica Bold", size: 18)
-        button.layer.cornerRadius = 25
+        
+        if UIScreen.main.bounds.height <= 568 {
+            button.titleLabel?.font = UIFont(name: "Helvetica Bold", size: 16)
+        } else {
+            button.titleLabel?.font = UIFont(name: "Helvetica Bold", size: 18)
+        }
+        button.titleLabel?.minimumScaleFactor = 0.1    //or whatever suits your need
+        button.titleLabel?.adjustsFontSizeToFitWidth = true
+        button.layer.cornerRadius = calculateButtonHeight()/2
         button.layer.masksToBounds = true
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapButton))
         button.addGestureRecognizer(gestureRecognizer)
         self.view.addSubview(button)
+
+        button.topAnchor.constraint(equalTo: self.view.topAnchor, constant: calculateButtonTopSpacing()).isActive = true
+        button.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: calculateButtonSideSpacing()).isActive = true
+        button.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -calculateButtonSideSpacing()).isActive = true
+        button.heightAnchor.constraint(equalToConstant: calculateButtonHeight()).isActive = true
+        button.layoutIfNeeded()
     }
+    
+    
     
     // MARK: - Delegate functions
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
