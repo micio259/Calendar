@@ -17,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         let rootViewController = PageViewController(transitionStyle: UIPageViewController.TransitionStyle.scroll, navigationOrientation: UIPageViewController.NavigationOrientation.horizontal, options: nil)
-        
         addRootViewController(viewController: rootViewController)
         window?.makeKeyAndVisible()
         
@@ -47,13 +46,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func addRootViewController(viewController: UIViewController) {
-        
         let rootViewController = viewController
-        
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
-        
     }
 
 

@@ -37,15 +37,6 @@ class CalendarTests: XCTestCase {
         appDelegate = nil
     }
 
-    func testAddPageControl() {
-        //given
-        let pageControl = UIPageControl()
-        //when
-        sut.setupPageControl(pageControl: pageControl)
-        //then
-        XCTAssertTrue(sut.view.subviews.contains(pageControl))
-    }
-
     func testSetupPageViewControllerDelegatesAndFirstScreen() {
         //given
         let array = [sut.firstViewController, sut.secondViewController, sut.thirdViewController, sut.fourthViewController]
@@ -55,15 +46,6 @@ class CalendarTests: XCTestCase {
         XCTAssertEqual(sut.viewControllers![0], array[0])
         XCTAssertNotNil(sut.delegate)
         XCTAssertNotNil(sut.dataSource)
-    }
-
-    func testAddButton() {
-        //given
-        let button = UIButton()
-        //when
-        sut.setupButton(button: button)
-        //then
-        XCTAssertTrue(sut.view.subviews.contains(button))
     }
 
     func testTapButton() {
@@ -84,16 +66,16 @@ class CalendarTests: XCTestCase {
         let _ = sut.view
         let desirableViewController = sut.orderedViewControllers[3]
         guard let index = sut.orderedViewControllers.firstIndex(of: desirableViewController) else { return }
-        XCTAssertEqual(sut.pageButton.titleLabel?.text!, "Start")
+        XCTAssertEqual(button.titleLabel?.text!, "Start")
         //when
         sut.setViewControllers([desirableViewController], direction: .forward, animated: false) { (bool) in
-            self.sut.pagePageControl.currentPage = index
+            pageControl.currentPage = index
             self.sut.changeButtonTitle()
         }
         //then
-        XCTAssertEqual(sut.pageButton.titleLabel?.text!, "Enter")
-        XCTAssertNotEqual(sut.pageButton.titleLabel?.text!, "Next")
-        XCTAssertNotEqual(sut.pageButton.titleLabel?.text!, "Start")
+        XCTAssertEqual(button.titleLabel?.text!, "Enter")
+        XCTAssertNotEqual(button.titleLabel?.text!, "Next")
+        XCTAssertNotEqual(button.titleLabel?.text!, "Start")
     }
 
     func testSetupNewViewController() {
@@ -102,18 +84,19 @@ class CalendarTests: XCTestCase {
         //when
         newViewController = OnboardingViewController(textTitle: "Title", description: "Description")
         //then
-        XCTAssertEqual(newViewController.textTitle?.text, "Title")
-        XCTAssertEqual(newViewController.textDescription?.text, "Description")
-        XCTAssertTrue(newViewController.view.subviews.contains(newViewController.imageView!))
+        XCTAssertEqual(newViewController.onboardingTextTitle?.text, "Title")
+        XCTAssertEqual(newViewController.onboardingTextDescription?.text, "Description")
+        XCTAssertTrue(newViewController.view.subviews.contains(newViewController.onboardingImageView!))
     }
     
     func testCalculatePageControlHeight() {
         //given
         //when
-        let returnValue = calculatePageControlTopSpacing()
+        let returnValue = calculatePageControlTopSpacing().rounded()
+        
         sut.view.layoutSubviews()
         //then
-        XCTAssertEqual(returnValue, sut.pagePageControl.frame.origin.y - sut.pageButton.frame.maxY)
+        XCTAssertEqual(returnValue, pageControl.frame.origin.y - button.frame.maxY)
     }
     
     func testCalculateButtonSideSpacing() {
@@ -121,7 +104,7 @@ class CalendarTests: XCTestCase {
         //when
         sut.view.layoutSubviews()
         let returnValue = ceil(calculateButtonSideSpacing())
-        let value = sut.pageButton.frame.origin.x
+        let value = button.frame.origin.x
         print(returnValue)
         print(value)
         //then
@@ -132,8 +115,8 @@ class CalendarTests: XCTestCase {
         //given
         //when
         sut.view.layoutSubviews()
-        let returnValue = calculateButtonHeight()
-        let buttonHeight = sut.pageButton.frame.height
+        let returnValue = calculateButtonHeight().rounded(.up)
+        let buttonHeight = button.frame.height.rounded()
         //then
         XCTAssertEqual(returnValue, buttonHeight)
     }
@@ -142,10 +125,107 @@ class CalendarTests: XCTestCase {
         //given
         //when
         sut.view.layoutSubviews()
-        let returnValue = calculateButtonTopSpacing()
-        let buttonY = sut.pageButton.frame.origin.y
+        let returnValue = calculateButtonTopSpacing().rounded()
+        let buttonY = button.frame.origin.y.rounded()
         //then
         XCTAssertEqual(returnValue, buttonY)
+    }
+    
+    func testGetMonthInString() {
+        //given
+        var components = DateComponents()
+        components.month = 6
+        components.year = 2018
+        components.calendar = Calendar.current
+        //when
+        let date = Calendar.current.date(from: components)
+        let stringMonth = date?.month
+        //then
+        XCTAssertEqual(stringMonth, "June")
+    }
+    
+    func testGetYearInString() {
+        //given
+        var components = DateComponents()
+        components.month = 6
+        components.year = 2018
+        components.calendar = Calendar.current
+        //when
+        let date = Calendar.current.date(from: components)
+        let stringYear = date?.year
+        //then
+        XCTAssertEqual(stringYear, "2018")
+    }
+    
+    func testDaysInMonth() {
+        //given
+        let date = Date()
+        let month = 2
+        let year = 2019
+        //when
+        let numberOfDays = date.daysInMonth(month, year)
+        //then
+        XCTAssertEqual(numberOfDays, 28)
+    }
+    
+    func testGetLastMonthDaysArray() {
+        //given
+        let vc = CalendarViewController()
+        var components = DateComponents()
+        components.month = 6
+        components.year = 2018
+        components.calendar = Calendar.current
+        let date = Calendar.current.date(from: components)
+        //when
+        let daysArray = vc.getLastMonthDaysArray(date).count
+        //then
+        XCTAssertEqual(daysArray, 31)
+    }
+    
+    func testGetStringDate() {
+        //given
+        let vc = CalendarViewController()
+        var components = DateComponents()
+        components.day = 10
+        components.month = 6
+        components.year = 2018
+        components.calendar = Calendar.current
+        let date = Calendar.current.date(from: components)
+        //when
+        let dateInString = vc.getStringDate(date)
+        //then
+        XCTAssertEqual(dateInString, "2018-06-10")
+    }
+    
+    func testGetDayOfWeekForFirstDayOfMonthFromDateString() {
+        //given
+        let vc = CalendarViewController()
+        var components = DateComponents()
+        components.year = 2018
+        components.month = 6
+        components.calendar = Calendar.current
+        let date = Calendar.current.date(from: components)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let stringDate = formatter.string(from: date!)
+        //when
+        let day = vc.getDayOfWeekForFirstDayOfMonthFromDateString(dateString: stringDate)
+        //then
+        XCTAssertEqual(day, "Friday")
+    }
+    
+    func testArrayOfLastDaysOfPreviousMonth() {
+        //given
+        let vc = CalendarViewController()
+        var components = DateComponents()
+        components.year = 2018
+        components.month = 6
+        components.calendar = Calendar.current
+        let date = Calendar.current.date(from: components)
+        //when
+        let lastDays = vc.arrayOfLastDaysOfPreviousMonth(date)
+        //then
+        XCTAssertEqual(lastDays.count, 4)
     }
     
 }
